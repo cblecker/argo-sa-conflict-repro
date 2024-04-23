@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-sa-conflict-repro
+  namespace: openshift-gitops
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argo-sa-conflict-repro
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: deploy
+    repoURL: 'https://github.com/cblecker/argo-sa-conflict-repro.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
